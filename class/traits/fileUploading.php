@@ -7,7 +7,7 @@ trait FileUploading
     public string $type = '';
     public int $size = 0;
     public array $errors = [];
-    public string $directory = 'uploads';
+    public string $directory;
     public string $placeholder = "https://cdn-icons-png.flaticon.com/512/428/428573.png";
 
     // Allowed extensions and MIME types
