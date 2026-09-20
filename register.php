@@ -7,8 +7,7 @@ if (isPostRequest()) {
     } else {
         $user = new User();
 
-        $user->ensure_directory_exists("users");
-        $user->directory = "users";
+   
         $user->name = trim($_POST['name']);
         $user->role = "user";
 
@@ -19,6 +18,7 @@ if (isPostRequest()) {
         } elseif (!$user->save_with_photo()) {
             $errors = $user->errors;
         } elseif ($user->save()) {
+            $session->login($user);
             Redirect('admin/index.php');
         } else {
             $errors[] = "Could not create the account.";

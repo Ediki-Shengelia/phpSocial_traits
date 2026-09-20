@@ -7,7 +7,7 @@ trait FileUploading
     public string $type = '';
     public int $size = 0;
     public array $errors = [];
-    public string $directory;
+    abstract protected function upload_directory(): string;
     public string $placeholder = "https://cdn-icons-png.flaticon.com/512/428/428573.png";
 
     // Allowed extensions and MIME types
@@ -39,7 +39,7 @@ trait FileUploading
             return $this->placeholder;
         }
 
-        return rtrim($this->directory, DS) . DS . $this->image;
+        return rtrim($this->upload_directory(), DS) . DS . $this->image;
     }
 
     public function set_file(array $file): bool
@@ -91,7 +91,7 @@ trait FileUploading
             return false;
         }
 
-        $target_dir = SITE_ROOT . DS . $this->directory;
+        $target_dir = SITE_ROOT . DS . $this->upload_directory();
         $this->ensure_directory_exists($target_dir);
 
         $target_path = $target_dir . DS . $this->image;
@@ -111,8 +111,7 @@ trait FileUploading
 
     public function delete_with_photo(): bool
     {
-        $target_path = SITE_ROOT . DS . $this->directory . DS . $this->image;
-
+        $target_path = SITE_ROOT . DS . $this->upload_directory() . DS . $this->image;
         if (method_exists($this, 'delete') && !$this->delete()) {
             return false;
         }

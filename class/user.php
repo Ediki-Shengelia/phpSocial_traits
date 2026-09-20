@@ -5,6 +5,11 @@ class User extends Db_object
 {
     use FileUploading;
     public static $db_name = 'users';
+    protected function upload_directory(): string
+    {
+        return "posts";
+    }
+
     public static $db_fields = array('name', 'email', 'password', 'role', 'image');
     public $id;
     public $name;
