@@ -9,6 +9,15 @@ $post = Post::find_by_id($post_id);
 ?>
 
 <h1 style="display: inline;"><?= $post->title; ?></h1>
+
+<?php $user_like = Like::find_by_user_post($session->getUserId(), $post_id); ?>
+<h2>
+    <a href="toggle_like.php?post_id=<?= (int) htmlspecialchars($post_id); ?>">
+        <?= $user_like ? "Unlike" : "Like"; ?>
+    </a>
+    (<?= Like::count_by_post_id($post_id); ?> Likes)
+</h2>
+
 <span style="color: green;"> by <?= User::find_by_id($post->user_id)->name; ?>
 
 </span>
