@@ -27,21 +27,32 @@ $posts = Post::find_all();
                 <?php foreach ($posts as $post): ?>
 
                     <?php $owner = User::find_by_id($post->user_id); ?>
-                    <tr style="border-bottom: 1px solid #f1f5f9;">
+
+                    <tr onclick="window.location='post.php?post_id=<?= (int)$post->id; ?>';" style="border-bottom: 1px solid #f1f5f9;cursor:pointer">
                         <td style="padding: 12px 16px; color: #64748b; font-weight: 500;">
-                            <a href="post.php?post_id=<?= htmlspecialchars($post->id); ?>">
-                                <?= htmlspecialchars($post->id); ?>
-                            </a>
+
+                            <?= htmlspecialchars($post->id); ?>
+
                         </td>
                         <td style="padding: 12px 16px; color: #1e293b;"><?= htmlspecialchars($owner ? $owner->name : 'N/A'); ?></td>
                         <td style="padding: 12px 16px; color: #64748b;"><?= htmlspecialchars($owner ? $owner->email : 'N/A'); ?></td>
-                        <td style="padding: 12px 16px; color: #1e293b; font-weight: 500;"><?= htmlspecialchars($post->title); ?></td>
+                        <td style="padding: 12px 16px; color: #1e293b; font-weight: 500;">
+                            <?= htmlspecialchars($post->title); ?>
+                            <div>
+                                <?php $user_like = Like::find_by_user_post($session->getUserId(), $post->id); ?>
+
+                                <?= $user_like ? "❤️" : "🤍"; ?>
+
+                                (<?= Like::count_by_post_id($post->id); ?> Likes)
+                            </div>
+                        </td>
                         <td style="padding: 12px 16px; text-align: center;">
                             <a href="post_delete.php?post_id=<?= htmlspecialchars($post->id); ?>">
                                 <button style="padding: 6px 12px; background-color: #ef4444; color: #ffffff; border: none; border-radius: 4px; font-size: 13px; font-weight: 500; cursor: pointer;">Delete</button>
                             </a>
                         </td>
                     </tr>
+
                 <?php endforeach; ?>
             </tbody>
         </table>

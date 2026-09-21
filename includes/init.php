@@ -13,3 +13,4 @@ require_once __DIR__ . '/../class/user.php';
 require_once __DIR__ . '/../class/session.php';
 require_once __DIR__ . '/../class/post.php';
 require_once __DIR__ . '/../class/like.php';
+require_once __DIR__ . '/../class/comment.php';
