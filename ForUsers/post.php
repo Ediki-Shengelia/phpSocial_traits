@@ -8,7 +8,17 @@ $post = Post::find_by_id($post_id);
 
 if (isPostRequest()) {
     $comment = trim($_POST['comment']);
-    Comment::create_comment($post_id, $comment);
+    $created_comm = Comment::create_comment($post_id, $comment);
+    if ($created_comm) {
+        if ($session->getUserId() != $post->user_id) {
+            $notification = new Notification("Comment", $created_comm->id);
+            $notification->user_id = $session->getUserId();
+            $notification->notifyType("Comment Added");
+            $user = User::find_by_id($session->getUserId())->name;
+            $notification->notifyData($user . " Added Comment on YOUR post -" . $post->title);
+            $notification->create_notification();
+        }
+    }
     Redirect("post.php?post_id={$post_id}");
 }
 $comments = Comment::find_by_post_id($post_id);

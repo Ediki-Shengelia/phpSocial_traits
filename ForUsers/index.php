@@ -4,6 +4,7 @@ require_once __DIR__ . '/partials/header.php';
 
 $posts = Post::find_all();
 ?>
+<a href="notifications.php">Notifications</a>
 <h2>Welcome <?= User::find_by_id($session->getUserId())->email; ?></h2>
 <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 1000px; margin: 20px auto; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); color: #333333;">
 

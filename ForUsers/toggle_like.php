@@ -16,7 +16,17 @@ if ($like) {
     $like = new Like();
     $like->user_id = $user_id;
     $like->post_id = $post_id;
-    $like->save();
+    if ($like->create()) {
+        $post = Post::find_by_id($post_id);
+        $liker = User::find_by_id($user_id);
+        if ($post->user_id != $user_id) {
+            $notification = new Notification("Like", $post->id);
+            $notification->user_id = $session->getUserId();
+            $notification->notifyType("Post Liked");
+            $notification->notifyData($liker->name . " Liked YOur post -" . $post->title);
+            $notification->create_notification();
+        }
+    }
 }
 
 Redirect("post.php?post_id={$post_id}");
