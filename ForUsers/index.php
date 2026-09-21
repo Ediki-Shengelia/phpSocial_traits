@@ -4,7 +4,7 @@ require_once __DIR__ . '/partials/header.php';
 
 $posts = Post::find_all();
 ?>
-
+<h2>Welcome <?= User::find_by_id($session->getUserId())->email; ?></h2>
 <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 1000px; margin: 20px auto; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); color: #333333;">
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -24,6 +24,7 @@ $posts = Post::find_all();
                 </tr>
             </thead>
             <tbody>
+                <?php $current_user = User::find_by_id($session->getUserId()); ?>
                 <?php foreach ($posts as $post): ?>
 
                     <?php $owner = User::find_by_id($post->user_id); ?>
@@ -47,9 +48,23 @@ $posts = Post::find_all();
                             </div>
                         </td>
                         <td style="padding: 12px 16px; text-align: center;">
-                            <a href="post_delete.php?post_id=<?= htmlspecialchars($post->id); ?>">
-                                <button style="padding: 6px 12px; background-color: #ef4444; color: #ffffff; border: none; border-radius: 4px; font-size: 13px; font-weight: 500; cursor: pointer;">Delete</button>
-                            </a>
+                            <?php
+                            $can_delete = $current_user && (
+                                $current_user->role === 'admin' ||
+                                (int)$post->user_id === (int)$current_user->id
+                            );
+                            ?>
+                            <?php if ($can_delete): ?>
+                                <form action="post_delete.php" method="post" style="margin: 0;"
+                                    onsubmit="return confirm('Delete this post?');">
+                                    <input type="hidden" name="post_id" value="<?= (int)$post->id; ?>">
+                                    <button type="submit" style="padding: 6px 12px; background-color: #ef4444; color: #ffffff; border: none; border-radius: 4px; font-size: 13px; font-weight: 500; cursor: pointer;">
+                                        Delete
+                                    </button>
+                                </form>
+                            <?php else: ?>
+                                <span style="color: #999; font-size: 13px;">—</span>
+                            <?php endif; ?>
                         </td>
                     </tr>
 
