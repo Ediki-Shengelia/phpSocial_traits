@@ -12,7 +12,7 @@ if (isPostRequest()) {
     if ($created_comm) {
         if ($session->getUserId() != $post->user_id) {
             $notification = new Notification("Comment", $created_comm->id);
-            $notification->user_id = $session->getUserId();
+            $notification->user_id = $post->user_id;
             $notification->notifyType("Comment Added");
             $user = User::find_by_id($session->getUserId())->name;
             $notification->notifyData($user . " Added Comment on YOUR post -" . $post->title);

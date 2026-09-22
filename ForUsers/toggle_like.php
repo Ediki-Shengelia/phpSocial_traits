@@ -19,9 +19,9 @@ if ($like) {
     if ($like->create()) {
         $post = Post::find_by_id($post_id);
         $liker = User::find_by_id($user_id);
-        if ($post->user_id != $user_id) {
+        if ($session->getUserId() != $post->user_id) {
             $notification = new Notification("Like", $post->id);
-            $notification->user_id = $session->getUserId();
+            $notification->user_id = $post->user_id;
             $notification->notifyType("Post Liked");
             $notification->notifyData($liker->name . " Liked YOur post -" . $post->title);
             $notification->create_notification();

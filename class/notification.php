@@ -36,25 +36,33 @@ class Notification extends Db_object
         }
         return false;
     }
-    public static function markAsAllRead()
+    public static function markAsAllRead($user_id)
     {
         global $database;
+        $user_id = (int) $user_id;
         $sql = "UPDATE " . static::$db_name . " SET ";
         $sql .= "read_at= :read_at";
-        $sql .= " WHERE read_at IS NULL OR read_at = '0000-00-00 00:00:00'";
-        $stmt = $database->prepare($sql, [':read_at' => date("Y-m-d H:i:s")]);
+        $sql .= " WHERE user_id = :user_id";
+        $sql .= " AND (read_at IS NULL OR read_at = '0000-00-00 00:00:00')";
+        $stmt = $database->prepare($sql, [
+            ':read_at' => date("Y-m-d H:i:s"),
+            ':user_id' => $user_id
+        ]);
         return $stmt->rowCount();
     }
-    public static function markAsRead($id)
+
+    public static function markAsRead($id, $user_id)
     {
         global $database;
         $id = (int) $id;
+        $user_id = (int) $user_id;
         $sql = "UPDATE " . static::$db_name . " SET ";
         $sql .= " read_at= :read_at";
-        $sql .= " WHERE id= :id";
+        $sql .= " WHERE id= :id AND user_id = :user_id";
         $stmt = $database->prepare($sql, [
             ":read_at" =>  date("Y-m-d H:i:s"),
-            ":id" => $id
+            ":id" => $id,
+            ":user_id" => $user_id
         ]);
         return $stmt->rowCount();
     }
