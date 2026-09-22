@@ -40,8 +40,13 @@ if (isset($_POST['allRead'])) {
         </thead>
         <tbody>
             <?php foreach ($notificationForOwner as $not): ?>
-                <tr style="border-bottom: 1px solid #e5e7eb; <?= empty($not->read_at) ? 'background-color: #f0fdf4;' : ''; ?>">
-                    <td style="padding: 12px 16px; color: #6b7280; font-size: 13px;"><?= htmlspecialchars($not->id); ?></td>
+                <tr onclick="window.location='post.php?post_id=<?= $not->notifiable_id; ?>';" style="cursor:pointer;border-bottom: 1px solid #e5e7eb; <?= empty($not->read_at) ? 'background-color: #f0fdf4;' : ''; ?>">
+                    <td style="padding: 12px 16px; color: #6b7280; font-size: 13px;">
+
+
+                        <?= htmlspecialchars($not->id); ?>
+
+                    </td>
                     <td style="padding: 12px 16px; color: #111827; max-width: 300px; word-break: break-word;"><?= htmlspecialchars($not->data); ?></td>
                     <td style="padding: 12px 16px; color: #6b7280;">
                         <?php if ($not->read_at): ?>

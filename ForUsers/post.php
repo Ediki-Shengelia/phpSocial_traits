@@ -11,7 +11,7 @@ if (isPostRequest()) {
     $created_comm = Comment::create_comment($post_id, $comment);
     if ($created_comm) {
         if ($session->getUserId() != $post->user_id) {
-            $notification = new Notification("Comment", $created_comm->id);
+            $notification = new Notification("Comment", $post->id);
             $notification->user_id = $post->user_id;
             $notification->notifyType("Comment Added");
             $user = User::find_by_id($session->getUserId())->name;
